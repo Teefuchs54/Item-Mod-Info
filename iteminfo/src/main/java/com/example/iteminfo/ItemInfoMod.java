@@ -26,23 +26,22 @@ public class ItemInfoMod implements ClientModInitializer {
         showInfoKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.iteminfo.show",
                 InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_LEFT_ALT,
+                GLFW.GLFW_KEY_LEFT_CONTROL,
                 ITEMINFO_CATEGORY
         ));
 
-        LOGGER.info("Item Info Mod geladen! ALT im Inventar halten fuer Item-Infos.");
+        LOGGER.info("Item Info Mod geladen! CTRL im Inventar halten fuer Item-Infos.");
     }
 
     /**
-     * Gibt zurück ob die ALT-Taste gerade gehalten wird.
-     * Fragt GLFW direkt — funktioniert für "halten", nicht nur für kurze Drücke.
+     * Fragt GLFW direkt ob CTRL gerade gehalten wird.
+     * Zuverlässiger als isPressed() oder InputUtil.
      */
     public static boolean isKeyHeld() {
         MinecraftClient client = MinecraftClient.getInstance();
-        if (client == null || client.getWindow() == null) return false;
-        return InputUtil.isKeyPressed(
-                client.getWindow(),
-                GLFW.GLFW_KEY_LEFT_ALT
-        );
+        if (client == null) return false;
+        long handle = client.getWindow().getHandle();
+        return GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_LEFT_CONTROL) == GLFW.GLFW_PRESS
+            || GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_RIGHT_CONTROL) == GLFW.GLFW_PRESS;
     }
 }
