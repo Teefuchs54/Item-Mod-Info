@@ -18,21 +18,16 @@ public class ItemInfoMod implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        // Tastenbelegung: Standard = LINKE ALT-Taste
         showInfoKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.iteminfo.show",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_LEFT_ALT,
-                "category.iteminfo"
+                KeyBinding.GAMEPLAY_CATEGORY
         ));
 
-        LOGGER.info("Item Info Mod geladen! ALT im Inventar halten für Item-Infos.");
+        LOGGER.info("Item Info Mod geladen! ALT im Inventar halten fuer Item-Infos.");
     }
 
-    /**
-     * Gibt zurück ob die Info-Taste gerade gedrückt gehalten wird.
-     * Wird vom Mixin aufgerufen beim Rendern des Inventars.
-     */
     public static boolean isKeyHeld() {
         return showInfoKey != null && showInfoKey.isPressed();
     }
