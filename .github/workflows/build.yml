@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -17,10 +18,13 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Gradle einrichten
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: 'release'
+      - name: Gradle automatisch installieren
+        run: |
+          GRADLE_VERSION=$(curl -s https://services.gradle.org/versions/current | python3 -c "import sys,json; print(json.load(sys.stdin)['version'])")
+          echo "Installiere Gradle ${GRADLE_VERSION}"
+          wget -q "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" -O /tmp/gradle.zip
+          unzip -q /tmp/gradle.zip -d /opt/gradle
+          echo "/opt/gradle/gradle-${GRADLE_VERSION}/bin" >> $GITHUB_PATH
 
       - name: Mod bauen
         working-directory: iteminfo
